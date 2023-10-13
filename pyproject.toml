@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "patch-ipa"
+version = "0.1.0"
+description = ""
+authors = ["k0tayan <kotayan0415@outlook.jp>"]
+readme = "README.md"
+packages = [{include = "patch_ipa"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+lief = "^0.13.2"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
