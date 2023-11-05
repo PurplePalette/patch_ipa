@@ -180,3 +180,6 @@ if __name__ == "__main__":
 
     # repack
     repackage_ipa(package_path)
+
+    # clean up
+    shutil.rmtree(package_path)
