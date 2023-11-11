@@ -77,15 +77,26 @@ def inject_cydia_substrate(package_path: Path) -> None:
     app_name = get_app_name(package_path)
     app_binary = app_name.split(".")[0]
 
-    shutil.copytree(
-        "Frameworks/CydiaSubstrate.framework",
-        package_path / "Payload" / app_name / "Frameworks" / "CydiaSubstrate",
-        dirs_exist_ok=True,
+    os.makedirs(
+        package_path / "Payload" / app_name / "Frameworks" / "CydiaSubstrate.framework",
+        exist_ok=True,
+    )
+
+    shutil.copy(
+        "Frameworks/libellekit.dylib",
+        package_path
+        / "Payload"
+        / app_name
+        / "Frameworks"
+        / "CydiaSubstrate.framework"
+        / "CydiaSubstrate",
     )
 
     binary_path = package_path / "Payload" / app_name / app_binary
     app = lief.parse(str(binary_path))
-    app.add_library("@executable_path/Frameworks/CydiaSubstrate/CydiaSubstrate")
+    app.add_library(
+        "@executable_path/Frameworks/CydiaSubstrate.framework/CydiaSubstrate"
+    )
     app.write(str(binary_path))
     print("Cydia Substrate injected!")
 
@@ -105,19 +116,6 @@ def inject_libraries(package_path: Path) -> None:
                 package_path / "Payload" / app_name / "Frameworks",
             )
             app.add_library(f"@executable_path/Frameworks/{library}")
-
-            l = lief.parse(
-                str(package_path / "Payload" / app_name / "Frameworks" / library)
-            )
-            for command in l.commands:
-                if (
-                    command.command == lief.MachO.LOAD_COMMAND_TYPES.LOAD_DYLIB
-                    and "CydiaSubstrate" in command.name
-                ):
-                    command.name = (
-                        "@executable_path/Frameworks/CydiaSubstrate/CydiaSubstrate"
-                    )
-            l.write(str(package_path / "Payload" / app_name / "Frameworks" / library))
     app.write(str(binary_path))
     print("Libraries injected!")
 
