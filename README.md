@@ -44,4 +44,5 @@ Please put the dylib you want to add here.
 
 About Libraries/libfaketouch.dylib\
 This is a library for dynamically generating touch from the outside.\
-Please delete it if it is not needed.
+Please delete it if it is not needed.\
+https://github.com/PurplePalette/libfaketouch/
