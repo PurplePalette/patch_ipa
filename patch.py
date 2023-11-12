@@ -26,22 +26,28 @@ def wget(path: Path, url: str) -> None:
 
 
 def download_frida(package_path: Path, gadget_name: str = "FridaGadget.dylib") -> None:
-    print("Downloading Frida Gadget...")
     GADGET_VER = "16.1.4"
     ARCH = "universal"
     GADGET = f"frida-gadget-{GADGET_VER}-ios-{ARCH}.dylib.xz"
     app_name = get_app_name(package_path)
-    wget(
-        package_path / "Payload" / app_name / "Frameworks" / GADGET,
-        url=f"https://github.com/frida/frida/releases/download/{GADGET_VER}/{GADGET}",
-    )
-    with lzma.open(package_path / "Payload" / app_name / "Frameworks" / GADGET) as file:
+
+    frida_cache_path = Path.home() / ".patch_ipa/frida"
+    os.makedirs(frida_cache_path, exist_ok=True)
+    # check cache
+    if not os.path.exists(frida_cache_path / GADGET):
+        print("Downloading Frida Gadget to", frida_cache_path)
+        wget(
+            frida_cache_path / GADGET,
+            url=f"https://github.com/frida/frida/releases/download/{GADGET_VER}/{GADGET}",
+        )
+    else:
+        print("Frida Gadget cached in", frida_cache_path)
+    with lzma.open(frida_cache_path / GADGET) as file:
         with open(
             package_path / "Payload" / app_name / "Frameworks" / gadget_name,
             mode="wb",
         ) as out:
             out.write(file.read())
-    os.remove(package_path / "Payload" / app_name / "Frameworks" / GADGET)
     print("Frida downloaded!")
 
 
