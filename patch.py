@@ -133,7 +133,6 @@ def edit_info_plist(package_path: Path, override_info_plist: Path) -> None:
     info_plist = package_path / "Payload" / app_name / "Info.plist"
     with open(info_plist, mode="rb") as file:
         info = plistlib.load(file)
-        print(info)
     with open(override_info_plist, mode="r") as file:
         json_data = json.load(file)
     for key, value in json_data.items():
