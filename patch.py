@@ -142,13 +142,11 @@ def edit_info_plist(package_path: Path, override_info_plist: Path) -> None:
     print("Info.plist edited!")
 
 
-def repackage_ipa(package_path: Path) -> None:
+def repackage_ipa(source_path: Path, output_path: Path) -> None:
     print("Repackaging...")
-    with zipfile.ZipFile(
-        str(package_path) + "_patched.ipa", "w", zipfile.ZIP_STORED
-    ) as zipf:
-        for file in package_path.rglob("*"):
-            zipf.write(file, file.relative_to(package_path))
+    with zipfile.ZipFile(output_path, "w", zipfile.ZIP_STORED) as zipf:
+        for file in source_path.rglob("*"):
+            zipf.write(file, file.relative_to(source_path))
     print("Repackaged!")
 
 
@@ -169,6 +167,7 @@ def dump_info_plist(ipa_file_path: Path) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Patch a file")
     parser.add_argument("file", help="file to patch")
+    parser.add_argument("-o", "--output", help="output file name")
     parser.add_argument("-c", "--config", help="FridaGadget.config")
     parser.add_argument(
         "--override-info-plist", help="override key and value for Info.plist(json file)"
@@ -203,7 +202,10 @@ if __name__ == "__main__":
         edit_info_plist(package_path, args.override_info_plist)
 
     # repack
-    repackage_ipa(package_path)
+    if args.output:
+        repackage_ipa(package_path, Path(args.output))
+    else:
+        repackage_ipa(package_path, package_path.with_suffix(".patched.ipa"))
 
     # clean up
     shutil.rmtree(package_path)

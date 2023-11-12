@@ -17,7 +17,7 @@ poetry install
 ## Usage
 
 ```
-usage: patch.py [-h] [-c CONFIG] [--override-info-plist OVERRIDE_INFO_PLIST] [--dump-info-plist DUMP_INFO_PLIST] file
+usage: patch.py [-h] [-o OUTPUT] [-c CONFIG] [--override-info-plist OVERRIDE_INFO_PLIST] [--dump-info-plist DUMP_INFO_PLIST] file
 
 Patch a file
 
@@ -26,6 +26,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        output file name
   -c CONFIG, --config CONFIG
                         FridaGadget.config
   --override-info-plist OVERRIDE_INFO_PLIST
