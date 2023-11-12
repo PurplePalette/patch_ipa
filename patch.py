@@ -163,7 +163,7 @@ def dump_info_plist(ipa_file_path: Path) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Patch a file")
     parser.add_argument("file", help="file to patch")
-    parser.add_argument("-c", "--config", help="config to copy")
+    parser.add_argument("-c", "--config", help="FridaGadget.config")
     parser.add_argument(
         "--override-info-plist", help="override key and value for Info.plist(json file)"
     )

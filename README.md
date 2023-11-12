@@ -27,7 +27,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -c CONFIG, --config CONFIG
-                        config to copy
+                        FridaGadget.config
   --override-info-plist OVERRIDE_INFO_PLIST
                         override key and value for Info.plist(json file)
   --dump-info-plist DUMP_INFO_PLIST
