@@ -144,10 +144,11 @@ def edit_info_plist(package_path: Path, override_info_plist: Path) -> None:
 
 def repackage_ipa(package_path: Path) -> None:
     print("Repackaging...")
-    shutil.make_archive(str(package_path) + "_patched.ipa", "zip", package_path)
-    os.rename(
-        str(package_path) + "_patched.ipa.zip", str(package_path) + "_patched.ipa"
-    )
+    with zipfile.ZipFile(
+        str(package_path) + "_patched.ipa", "w", zipfile.ZIP_STORED
+    ) as zipf:
+        for file in package_path.rglob("*"):
+            zipf.write(file, file.relative_to(package_path))
     print("Repackaged!")
 
 
