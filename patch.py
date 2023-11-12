@@ -4,6 +4,7 @@ import lzma
 import os
 import plistlib
 import shutil
+import zipfile
 from pathlib import Path
 
 import lief
@@ -145,6 +146,20 @@ def repackage_ipa(package_path: Path) -> None:
     print("Repackaged!")
 
 
+def dump_info_plist(ipa_file_path: Path) -> None:
+    print("Dumping Info.plist...")
+    with zipfile.ZipFile(ipa_file_path, "r") as zip_ref:
+        generator = (
+            name for name in zip_ref.namelist() if name.endswith(".app/Info.plist")
+        )
+        plist_path = next(generator, None)
+        with zip_ref.open(plist_path) as file:
+            info = plistlib.load(file)
+        with open(args.dump_info_plist, mode="w", encoding="utf-8") as file:
+            json.dump(info, file, indent=4, ensure_ascii=False)
+    print("Dumped!")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Patch a file")
     parser.add_argument("file", help="file to patch")
@@ -152,7 +167,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--override-info-plist", help="override key and value for Info.plist(json file)"
     )
+    parser.add_argument("--dump-info-plist", help="dump Info.plist")
     args = parser.parse_args()
+
+    if args.dump_info_plist:
+        dump_info_plist(Path(args.file))
+        exit(0)
 
     print("Patching file: " + args.file)
 

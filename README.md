@@ -1,11 +1,5 @@
 # patch\_ipa
 
-```
-poetry install
-poetry shell
-python patch.py <ipa file> -c FridaGadget.config --override-info-plist override_info.plist.json
-```
-
 ## Features
 
 * Inject FridaGadget.dylib to ipa
@@ -13,6 +7,32 @@ python patch.py <ipa file> -c FridaGadget.config --override-info-plist override_
 * Inject Ellekit to ipa
 * Inject other dylibs to ipa
 * Modify Info.plist
+
+## Install
+
+```
+poetry install
+```
+
+## Usage
+
+```
+usage: patch.py [-h] [-c CONFIG] [--override-info-plist OVERRIDE_INFO_PLIST] [--dump-info-plist DUMP_INFO_PLIST] file
+
+Patch a file
+
+positional arguments:
+  file                  file to patch
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        config to copy
+  --override-info-plist OVERRIDE_INFO_PLIST
+                        override key and value for Info.plist(json file)
+  --dump-info-plist DUMP_INFO_PLIST
+                        dump Info.plist
+```
 
 ## Libraries/\*
 
