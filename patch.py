@@ -9,6 +9,7 @@ from pathlib import Path
 
 import lief
 import requests
+from tqdm import tqdm
 
 
 def get_app_name(package_path: Path) -> str:
@@ -20,8 +21,16 @@ def get_app_name(package_path: Path) -> str:
 
 def wget(path: Path, url: str) -> None:
     response = requests.request(method="GET", url=url, stream=True)
-    with open(path, mode="wb") as file:
-        for data in response.iter_content(chunk_size=1024):
+
+    # レスポンスヘッダーからファイルサイズを取得
+    total_size_in_bytes = int(response.headers.get("content-length", 0))
+    block_size = 1024
+
+    with open(path, mode="wb") as file, tqdm(
+        desc=path.name, total=total_size_in_bytes, unit="iB", unit_scale=True
+    ) as progress:
+        for data in response.iter_content(chunk_size=block_size):
+            progress.update(len(data))
             file.write(data)
 
 

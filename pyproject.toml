@@ -10,6 +10,7 @@ packages = [{include = "patch_ipa"}]
 python = "^3.9"
 lief = "^0.13.2"
 requests = "^2.31.0"
+tqdm = "^4.66.1"
 
 
 [build-system]
